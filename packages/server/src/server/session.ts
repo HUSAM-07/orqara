@@ -446,13 +446,6 @@ const nodeSessionFileSystem: SessionFileSystem = {
   },
 };
 
-function resolveTaskService(options: SessionOptions): TaskService {
-  return (
-    options.taskService ??
-    new TaskService(resolve(options.paseoHome, "orqara-tasks"), options.workspaceRegistry)
-  );
-}
-
 // Stub types for features under development (modules not yet available)
 type AgentMcpTransportFactory = () => Promise<unknown>;
 
@@ -764,7 +757,7 @@ export class Session {
   private readonly daemonSession: DaemonSession;
   private readonly hubExecutionController: HubExecutionController | null;
   private readonly workspaceScripts: WorkspaceScriptsService;
-  private readonly tasks: TaskService;
+  private tasks: TaskService | undefined;
   private readonly ownsTaskService: boolean;
   private readonly agentRequests: Pick<AgentRequests, "create" | "send">;
   private readonly createAgentLifecycleDispatch: CreateAgentLifecycleDispatch;
@@ -1089,7 +1082,7 @@ export class Session {
         assertWorkspaceAutomationAllowedForWorkspace(this.workspaceRegistry, workspaceId),
       globalServicePorts: loadPersistedConfig(this.paseoHome).worktrees?.servicePorts,
     });
-    this.tasks = resolveTaskService(options);
+    this.tasks = options.taskService;
     this.ownsTaskService = options.taskService === undefined;
     this.subscribeToOptionalManagers();
     this.workspaceDirectory = new WorkspaceDirectory({
@@ -6622,7 +6615,7 @@ export class Session {
 
   private async handleTaskCreateRequest(request: TaskCreateRequest): Promise<void> {
     try {
-      const result = await this.tasks.create(request);
+      const result = await this.taskService.create(request);
       this.emit({
         type: "task.create.response",
         payload: {
@@ -6653,7 +6646,7 @@ export class Session {
         payload: {
           requestId: request.requestId,
           workspaceId: request.workspaceId,
-          tasks: await this.tasks.list(request.workspaceId),
+          tasks: await this.taskService.list(request.workspaceId),
           error: null,
         },
       });
@@ -6672,7 +6665,7 @@ export class Session {
 
   private async handleTaskVerifyRequest(request: TaskVerifyRequest): Promise<void> {
     try {
-      const task = await this.tasks.get(request.workspaceId, request.taskId);
+      const task = await this.taskService.get(request.workspaceId, request.taskId);
       const agent = task.agentId
         ? (this.agentManager.getAgent(task.agentId) ?? (await this.agentStorage.get(task.agentId)))
         : null;
@@ -6681,7 +6674,10 @@ export class Session {
         this.workspaceRegistry,
         agent?.workspaceId ?? request.workspaceId,
       );
-      const result = await this.tasks.verify({ ...request, ...(agent ? { cwd: agent.cwd } : {}) });
+      const result = await this.taskService.verify({
+        ...request,
+        ...(agent ? { cwd: agent.cwd } : {}),
+      });
       this.emit({
         type: "task.verify.response",
         payload: {
@@ -6715,7 +6711,7 @@ export class Session {
           requestId: request.requestId,
           workspaceId: request.workspaceId,
           taskId: request.taskId,
-          evidence: await this.tasks.evidence(request.workspaceId, request.taskId),
+          evidence: await this.taskService.evidence(request.workspaceId, request.taskId),
           error: null,
         },
       });
@@ -6739,10 +6735,10 @@ export class Session {
       const taskId = agent?.labels["orqara.taskId"];
       const workspaceId = agent?.labels["orqara.taskWorkspaceId"];
       if (!taskId || !workspaceId || !agent.workspaceId) return;
-      const task = await this.tasks.get(workspaceId, taskId);
+      const task = await this.taskService.get(workspaceId, taskId);
       if (task.status !== "running" || task.agentId !== agentId) return;
       await assertWorkspaceAutomationAllowedForWorkspace(this.workspaceRegistry, agent.workspaceId);
-      await this.tasks.verify({
+      await this.taskService.verify({
         workspaceId,
         taskId,
         commandId: `agent-finished:${agentId}:${turnId ?? "foreground"}`,
@@ -6756,7 +6752,7 @@ export class Session {
   private async handleTaskCommandRequest(request: TaskCommandRequest): Promise<void> {
     try {
       let result: Awaited<ReturnType<TaskService["command"]>>;
-      const task = await this.tasks.get(request.workspaceId, request.taskId);
+      const task = await this.taskService.get(request.workspaceId, request.taskId);
       if (request.action === "start" && task.status === "queued") {
         if (task.revision !== request.expectedRevision) {
           throw new Error(
@@ -6794,18 +6790,18 @@ export class Session {
           findAgent: async (id) =>
             this.agentManager.getAgent(id) != null || (await this.agentStorage.get(id)) !== null,
           create: async (id) => {
-            await this.tasks.command({ ...request, agentId: id });
+            await this.taskService.command({ ...request, agentId: id });
             try {
               await this.createSessionAgent(agentRequest, id);
             } catch (error) {
-              await this.tasks.failStart(request.workspaceId, request.taskId, id);
+              await this.taskService.failStart(request.workspaceId, request.taskId, id);
               throw error;
             }
           },
         });
-        result = await this.tasks.command({ ...request, agentId });
+        result = await this.taskService.command({ ...request, agentId });
       } else {
-        result = await this.tasks.command(request);
+        result = await this.taskService.command(request);
       }
       this.emit({
         type: "task.command.response",
@@ -8030,7 +8026,14 @@ export class Session {
 
     this.workspaceGitObserver.dispose();
     this.workspaceFilesSession.dispose();
-    if (this.ownsTaskService) await this.tasks.close();
+    if (this.ownsTaskService) await this.tasks?.close();
+  }
+
+  private get taskService(): TaskService {
+    return (this.tasks ??= new TaskService(
+      resolve(this.paseoHome, "orqara-tasks"),
+      this.workspaceRegistry,
+    ));
   }
 }
 

@@ -50,7 +50,7 @@ it("persists idempotent create, verification, evidence, and acceptance", async (
     checks: [
       {
         id: "test",
-        command: `${JSON.stringify(process.execPath)} -e "process.exit(0)"`,
+        command: 'node -e "process.exit(0)"',
         timeoutMs: 2_000,
       },
     ],

@@ -25,7 +25,7 @@ describe("runVerification", () => {
   it("passes only when the command succeeds on an unchanged snapshot", async () => {
     const result = await runVerification({
       cwd,
-      command: `${JSON.stringify(process.execPath)} -e "process.exit(0)"`,
+      command: 'node -e "process.exit(0)"',
       timeoutMs: 2_000,
     });
 
@@ -38,7 +38,7 @@ describe("runVerification", () => {
   it("records a failed command", async () => {
     const result = await runVerification({
       cwd,
-      command: `${JSON.stringify(process.execPath)} -e "process.exit(7)"`,
+      command: 'node -e "process.exit(7)"',
       timeoutMs: 2_000,
     });
 
@@ -49,7 +49,7 @@ describe("runVerification", () => {
   it("times out a check that exceeds its deadline", async () => {
     const result = await runVerification({
       cwd,
-      command: `${JSON.stringify(process.execPath)} -e "setTimeout(() => {}, 10000)"`,
+      command: 'node -e "setTimeout(() => {}, 10000)"',
       timeoutMs: 50,
     });
 
@@ -62,7 +62,7 @@ describe("runVerification", () => {
     const script = "require('fs').appendFileSync('file.txt','generated\\n')";
     const result = await runVerification({
       cwd,
-      command: `${JSON.stringify(process.execPath)} -e ${JSON.stringify(script)}`,
+      command: `node -e ${JSON.stringify(script)}`,
       timeoutMs: 2_000,
     });
 
@@ -75,7 +75,7 @@ describe("runVerification", () => {
     const script = `setTimeout(()=>require('fs').appendFileSync(${JSON.stringify(source)},'changed\\n'),50);setTimeout(()=>{},150)`;
     const result = await runVerification({
       cwd,
-      command: `${JSON.stringify(process.execPath)} -e ${JSON.stringify(script)}`,
+      command: `node -e ${JSON.stringify(script)}`,
       timeoutMs: 2_000,
     });
 

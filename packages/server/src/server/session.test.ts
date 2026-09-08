@@ -437,6 +437,14 @@ function createSessionForTest(options: SessionForTestOptions = {}): Session {
   return new Session(sessionOptions);
 }
 
+test("does not create task storage before a task request", async () => {
+  const paseoHome = mkdtempSync(join(tmpdir(), "orqara-lazy-tasks-"));
+  const session = createSessionForTest({ paseoHome });
+  expect(existsSync(join(paseoHome, "orqara-tasks"))).toBe(false);
+  await session.cleanup();
+  rmSync(paseoHome, { recursive: true, force: true });
+});
+
 test("routes host-scoped agent skills requests through the daemon owner", async () => {
   const messages: SessionOutboundMessage[] = [];
   const status = {
