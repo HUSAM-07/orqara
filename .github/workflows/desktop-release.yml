@@ -166,7 +166,7 @@ jobs:
 
       - name: Upload packaged smoke diagnostics
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: desktop-smoke-macos-${{ matrix.electron_arch }}
           path: ${{ runner.temp }}/desktop-smoke
@@ -194,7 +194,7 @@ jobs:
 
       - name: Upload desktop artifacts to workflow
         if: env.SHOULD_PUBLISH != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: desktop-macos-${{ matrix.electron_arch }}
           path: ${{ env.DESKTOP_PACKAGE_PATH }}/release/*.dmg
@@ -202,7 +202,7 @@ jobs:
 
       - name: Upload manifest artifact
         if: env.SHOULD_PUBLISH == 'true' && env.IS_SMOKE_TAG != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: mac-manifest-${{ matrix.electron_arch }}
           path: ${{ env.DESKTOP_PACKAGE_PATH }}/release/${{ env.RELEASE_CHANNEL }}-mac.yml
@@ -271,7 +271,7 @@ jobs:
 
       - name: Upload packaged smoke diagnostics
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: desktop-smoke-linux-x64
           path: ${{ runner.temp }}/desktop-smoke
@@ -299,7 +299,7 @@ jobs:
 
       - name: Upload desktop artifacts to workflow
         if: env.SHOULD_PUBLISH != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: desktop-linux
           path: ${{ env.DESKTOP_PACKAGE_PATH }}/release/*
@@ -307,7 +307,7 @@ jobs:
 
       - name: Upload manifest artifact
         if: env.SHOULD_PUBLISH == 'true' && env.IS_SMOKE_TAG != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linux-manifest
           path: ${{ env.DESKTOP_PACKAGE_PATH }}/release/${{ env.RELEASE_CHANNEL }}-linux.yml
@@ -373,7 +373,7 @@ jobs:
 
       - name: Upload packaged smoke diagnostics
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: desktop-smoke-windows-x64
           path: ${{ runner.temp }}/desktop-smoke
@@ -401,7 +401,7 @@ jobs:
 
       - name: Upload desktop artifacts to workflow
         if: env.SHOULD_PUBLISH != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: desktop-windows
           path: ${{ env.DESKTOP_PACKAGE_PATH }}/release/*
@@ -409,7 +409,7 @@ jobs:
 
       - name: Upload manifest artifact
         if: env.SHOULD_PUBLISH == 'true' && env.IS_SMOKE_TAG != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: windows-manifest
           path: ${{ env.DESKTOP_PACKAGE_PATH }}/release/${{ env.RELEASE_CHANNEL }}.yml
