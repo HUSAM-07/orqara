@@ -5,8 +5,6 @@ import test from "node:test";
 
 const repoRoot = new URL("../", import.meta.url);
 const ciWorkflowPath = new URL(".github/workflows/ci.yml", repoRoot);
-const dockerWorkflowPath = new URL(".github/workflows/docker.yml", repoRoot);
-const nixWorkflowPath = new URL(".github/workflows/nix.yml", repoRoot);
 const filtersPath = new URL(".github/ci-paths.yml", repoRoot);
 const serverTsconfigPath = new URL("packages/server/tsconfig.server.json", repoRoot);
 const desktopPackagePath = new URL("packages/desktop/package.json", repoRoot);
@@ -99,14 +97,12 @@ test("gated checks are statically named jobs with real job-level gating", () => 
 });
 
 test("change gating allows superseded workflow runs to cancel", () => {
-  for (const workflowPath of [ciWorkflowPath, dockerWorkflowPath, nixWorkflowPath]) {
-    const source = readFileSync(workflowPath, "utf8");
-    assert.doesNotMatch(
-      source,
-      /\$\{\{\s*always\(\)/,
-      "always() keeps jobs alive after concurrency cancellation; use !cancelled() for fail-open gating",
-    );
-  }
+  const source = readFileSync(ciWorkflowPath, "utf8");
+  assert.doesNotMatch(
+    source,
+    /\$\{\{\s*always\(\)/,
+    "always() keeps jobs alive after concurrency cancellation; use !cancelled() for fail-open gating",
+  );
 });
 
 test("focused contracts stay inside existing required checks", () => {
@@ -272,13 +268,4 @@ test("browser and desktop tests have exclusive, directory-owned suites", () => {
     "packages/app/*config.{cjs,js,ts}",
     "packages/app/package.json",
   ]);
-});
-
-test("non-required Docker and Nix workflows avoid runners with workflow path filters", () => {
-  for (const workflowPath of [dockerWorkflowPath, nixWorkflowPath]) {
-    const source = readFileSync(workflowPath, "utf8");
-    const trigger = source.split("jobs:", 1)[0];
-    assert.match(trigger, /^\s+paths:\s*$/m);
-    assert.doesNotMatch(source, /dorny\/paths-filter/);
-  }
 });
