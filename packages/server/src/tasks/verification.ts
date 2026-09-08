@@ -3,6 +3,10 @@ import { cp, lstat, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "nod
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { execCommand } from "../utils/spawn.js";
+import {
+  buildStringCommandShellInvocation,
+  createStringCommandShellEnvOverlay,
+} from "../utils/string-command-shell.js";
 
 const MAX_LOG_BYTES = 1024 * 1024;
 
@@ -138,13 +142,15 @@ export async function runVerification(input: {
   let timedOut = false;
 
   try {
-    const shell = process.platform === "win32" ? "cmd.exe" : "/bin/sh";
-    const args =
-      process.platform === "win32" ? ["/d", "/s", "/c", input.command] : ["-lc", input.command];
+    const { shell, args } = buildStringCommandShellInvocation({
+      command: input.command,
+      windowsShell: "cmd",
+    });
     const result = await execCommand(shell, args, {
       cwd: checkout,
       timeout: input.timeoutMs,
       maxBuffer: MAX_LOG_BYTES,
+      envOverlay: createStringCommandShellEnvOverlay(),
     });
     stdout = result.stdout;
     stderr = result.stderr;

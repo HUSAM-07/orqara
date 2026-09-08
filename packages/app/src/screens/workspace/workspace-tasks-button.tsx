@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState, type ReactElement } from "react";
 import { Text, View } from "react-native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, ListTodo, Play, Plus } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native-unistyles";
 import type { TaskPayload } from "@getpaseo/protocol/messages";
 import { AdaptiveModalSheet, AdaptiveTextInput } from "@/components/adaptive-modal-sheet";
@@ -117,6 +118,7 @@ export function WorkspaceTasksButton({
     (state) => state.sessions[serverId]?.serverInfo?.features?.tasksV1 === true,
   );
   const toast = useToast();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState("");
@@ -134,7 +136,7 @@ export function WorkspaceTasksButton({
     staleTimeMs: 0,
     refetchInterval: 1_000,
     queryFn: async () => {
-      if (!client) throw new Error("Daemon client unavailable");
+      if (!client) throw new Error(t("common.errors.daemonClientUnavailable"));
       const result = await client.listTasks(workspaceId);
       if (result.error) throw new Error(result.error);
       return result.tasks;
@@ -148,7 +150,7 @@ export function WorkspaceTasksButton({
 
   const createTask = useMutation({
     mutationFn: async () => {
-      if (!client) throw new Error("Daemon client unavailable");
+      if (!client) throw new Error(t("common.errors.daemonClientUnavailable"));
       const result = await client.createTask({
         workspaceId,
         title: title.trim(),
@@ -171,7 +173,7 @@ export function WorkspaceTasksButton({
 
   const verifyTask = useMutation({
     mutationFn: async (taskId: string) => {
-      if (!client) throw new Error("Daemon client unavailable");
+      if (!client) throw new Error(t("common.errors.daemonClientUnavailable"));
       const result = await client.verifyTask({
         workspaceId,
         taskId,
@@ -186,7 +188,7 @@ export function WorkspaceTasksButton({
 
   const startTask = useMutation({
     mutationFn: async (task: TaskPayload) => {
-      if (!client) throw new Error("Daemon client unavailable");
+      if (!client) throw new Error(t("common.errors.daemonClientUnavailable"));
       const result = await client.commandTask({
         workspaceId,
         taskId: task.id,
@@ -203,7 +205,7 @@ export function WorkspaceTasksButton({
 
   const acceptTask = useMutation({
     mutationFn: async (task: TaskPayload) => {
-      if (!client) throw new Error("Daemon client unavailable");
+      if (!client) throw new Error(t("common.errors.daemonClientUnavailable"));
       const result = await client.commandTask({
         workspaceId,
         taskId: task.id,

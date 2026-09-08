@@ -48,7 +48,7 @@ describe("deriveProjectDisplayName", () => {
         projectKey: "remote:github.com/husam-07/orqara",
         projectName: "paseo",
       }),
-    ).toBe("HUSAM-07/orqara");
+    ).toBe("husam-07/orqara");
   });
 
   it("shows remote path for non-GitHub remote keys", () => {

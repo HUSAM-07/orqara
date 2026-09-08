@@ -559,6 +559,7 @@ test("routes plugin requests and releases its owned catalog subscription on clea
     payload: { status: "plugin_catalog_changed", pluginId: "example" },
   });
   await session.cleanup();
+  await session.cleanup();
   expect(listeners.size).toBe(0);
   expect(releasePluginSubscription).toHaveBeenCalledOnce();
 });

@@ -28,7 +28,7 @@ import { openExternalUrl } from "@/utils/open-external-url";
 
 const DISCORD_URL = "https://github.com/HUSAM-07/orqara/discussions";
 const GITHUB_ISSUE_URL = "https://github.com/HUSAM-07/orqara/issues/new";
-const CHANGELOG_URL = "https://orqara.pages.dev/changelog";
+const RELEASES_URL = "https://github.com/HUSAM-07/orqara/releases";
 const ThemedActivity = withUnistyles(Activity);
 const ThemedCircleHelp = withUnistyles(CircleHelp);
 const ThemedGift = withUnistyles(Gift);
@@ -98,7 +98,7 @@ export function SidebarHelpMenu() {
   }, []);
 
   const openChangelog = useCallback(() => {
-    void openExternalUrl(CHANGELOG_URL);
+    void openExternalUrl(RELEASES_URL);
   }, []);
 
   return (

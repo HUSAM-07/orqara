@@ -339,7 +339,7 @@ describe("start", () => {
     expect(spawnCalls[0]).toMatchObject({
       repoRoot: "/tmp/repo",
       workspaceId: "ws-1",
-      projectSlug: "paseo",
+      projectSlug: "orqara",
       branchName: "feature/scripts",
       scriptName: "app",
       daemonPort: 6767,

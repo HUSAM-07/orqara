@@ -35,7 +35,7 @@ describe("path equivalence", () => {
 
   test("checks Windows root containment case-insensitively", () => {
     expect(
-      isPathInsideRoot("C:\\Orqara\\node_modules", "c:/paseo/node_modules/@getpaseo/server"),
+      isPathInsideRoot("C:\\Orqara\\node_modules", "c:/orqara/node_modules/@getpaseo/server"),
     ).toBe(true);
     expect(isPathInsideRoot("C:\\Orqara\\node_modules", "C:\\Orqara\\node_modules-other")).toBe(
       false,

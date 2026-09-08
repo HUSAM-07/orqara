@@ -765,6 +765,7 @@ export class Session {
   private readonly hubExecutionController: HubExecutionController | null;
   private readonly workspaceScripts: WorkspaceScriptsService;
   private readonly tasks: TaskService;
+  private readonly ownsTaskService: boolean;
   private readonly agentRequests: Pick<AgentRequests, "create" | "send">;
   private readonly createAgentLifecycleDispatch: CreateAgentLifecycleDispatch;
 
@@ -1089,6 +1090,7 @@ export class Session {
       globalServicePorts: loadPersistedConfig(this.paseoHome).worktrees?.servicePorts,
     });
     this.tasks = resolveTaskService(options);
+    this.ownsTaskService = options.taskService === undefined;
     this.subscribeToOptionalManagers();
     this.workspaceDirectory = new WorkspaceDirectory({
       logger: this.sessionLogger,
@@ -7996,6 +7998,7 @@ export class Session {
    * Clean up session resources
    */
   public async cleanup(): Promise<void> {
+    if (this.isCleanedUp) return;
     this.sessionLogger.trace({}, "agent.session.lifecycle.cleanup");
     this.isCleanedUp = true;
 
@@ -8027,6 +8030,7 @@ export class Session {
 
     this.workspaceGitObserver.dispose();
     this.workspaceFilesSession.dispose();
+    if (this.ownsTaskService) await this.tasks.close();
   }
 }
 
