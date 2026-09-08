@@ -183,7 +183,7 @@ function createRuntimeBoundaryPlugin(target: PluginBuildTarget, pluginDirectory:
         ) {
           return null;
         }
-        const resolvedPath = resolution.path;
+        const resolvedPath = realpathSync.native(resolution.path);
         const importedTarget = directoryTarget(resolvedPath, pluginDirectory);
         if (importedTarget === "invalid") {
           if (
