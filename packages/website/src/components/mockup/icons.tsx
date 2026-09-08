@@ -1,7 +1,20 @@
 // Exact SVG paths from packages/app/src/components/icons/
 
-/** The Orqara brand swirl — public/logo.svg, drawn as a small sidebar avatar mark. */
-export function PaseoMark({ size = 13, className }: { size?: number; className?: string }) {
+/** The current Orqara mascot mark, shared by the product mockups. */
+export function OrqaraMark({ size = 13, className }: { size?: number; className?: string }) {
+  return (
+    <img
+      src="/logo.png"
+      alt=""
+      width={size}
+      height={size}
+      className={className ? `rounded-[22%] ${className}` : "rounded-[22%]"}
+    />
+  );
+}
+
+/** Legacy vector retained only for archived mockup compatibility. */
+export function LegacyMark({ size = 13, className }: { size?: number; className?: string }) {
   return (
     <svg
       width={size}

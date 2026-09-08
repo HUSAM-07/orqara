@@ -4,7 +4,7 @@ export function SiteHeader() {
   return (
     <header className="flex items-center justify-between gap-6">
       <a href="/" className="flex items-center gap-3" aria-label="Orqara home">
-        <img src="/logo.svg" alt="" className="h-7 w-7" />
+        <img src="/logo.png" alt="" className="h-7 w-7 rounded-[22%]" />
         <span className="text-lg font-semibold tracking-tight">Orqara</span>
       </a>
       <nav className="flex items-center gap-5" aria-label="Main navigation">

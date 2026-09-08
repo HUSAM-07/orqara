@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="packages/website/public/logo.svg" width="72" height="72" alt="Orqara logo">
+  <img src="packages/website/public/logo.png" width="72" height="72" alt="Orqara logo">
 </p>
 
 <h1 align="center">Orqara</h1>
