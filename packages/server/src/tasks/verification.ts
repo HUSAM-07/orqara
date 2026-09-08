@@ -1,12 +1,14 @@
 import { createHash } from "node:crypto";
+import { once } from "node:events";
 import { cp, lstat, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { execCommand } from "../utils/spawn.js";
+import { execCommand, spawnProcess } from "../utils/spawn.js";
 import {
   buildStringCommandShellInvocation,
   createStringCommandShellEnvOverlay,
 } from "../utils/string-command-shell.js";
+import { terminateWithTreeKill } from "../utils/tree-kill.js";
 
 const MAX_LOG_BYTES = 1024 * 1024;
 
@@ -78,6 +80,55 @@ export async function captureVerificationSnapshot(cwd: string): Promise<Verifica
   return (await captureWorkspace(cwd)).snapshot;
 }
 
+async function executeVerificationCommand(input: {
+  cwd: string;
+  command: string;
+  timeoutMs: number;
+}): Promise<{ exitCode: number | null; stdout: string; stderr: string; timedOut: boolean }> {
+  const { shell, args } = buildStringCommandShellInvocation({
+    command: input.command,
+    windowsShell: "cmd",
+  });
+
+  let stdout = "";
+  let stderr = "";
+  let timedOut = false;
+  const child = spawnProcess(shell, args, {
+    cwd: input.cwd,
+    envOverlay: createStringCommandShellEnvOverlay(),
+    shell: false,
+    stdio: ["ignore", "pipe", "pipe"],
+    windowsVerbatimArguments: process.platform === "win32",
+  });
+  const append = (current: string, chunk: Buffer | string) =>
+    (current + chunk.toString()).slice(0, MAX_LOG_BYTES);
+  child.stdout?.on("data", (chunk: Buffer | string) => {
+    stdout = append(stdout, chunk);
+  });
+  child.stderr?.on("data", (chunk: Buffer | string) => {
+    stderr = append(stderr, chunk);
+  });
+  const timer = setTimeout(() => {
+    timedOut = true;
+    void terminateWithTreeKill(child, {
+      gracefulTimeoutMs: 250,
+      forceTimeoutMs: 250,
+    });
+  }, input.timeoutMs);
+  const [exitCode] = await once(child, "close").catch((error: Error) => {
+    stderr = append(stderr, error.message);
+    return [null];
+  });
+  clearTimeout(timer);
+  const normalizedExitCode = !timedOut && typeof exitCode === "number" ? exitCode : null;
+  return {
+    exitCode: normalizedExitCode,
+    stdout,
+    stderr,
+    timedOut,
+  };
+}
+
 async function materializeWorkspace(cwd: string, captured: CapturedWorkspace): Promise<string> {
   const root = await mkdtemp(join(tmpdir(), "orqara-verification-checkout-"));
   const checkout = join(root, "repo");
@@ -136,37 +187,11 @@ export async function runVerification(input: {
   const checkout = await materializeWorkspace(input.cwd, captured);
   const startedAt = new Date().toISOString();
   const started = Date.now();
-  let stdout = "";
-  let stderr = "";
-  let exitCode: number | null = 0;
-  let timedOut = false;
-
-  try {
-    const { shell, args } = buildStringCommandShellInvocation({
-      command: input.command,
-      windowsShell: "cmd",
-    });
-    const result = await execCommand(shell, args, {
-      cwd: checkout,
-      timeout: input.timeoutMs,
-      maxBuffer: MAX_LOG_BYTES,
-      envOverlay: createStringCommandShellEnvOverlay(),
-    });
-    stdout = result.stdout;
-    stderr = result.stderr;
-  } catch (error) {
-    const failure = error as Error & {
-      code?: number | string;
-      killed?: boolean;
-      signal?: string;
-      stdout?: string;
-      stderr?: string;
-    };
-    stdout = failure.stdout ?? "";
-    stderr = failure.stderr ?? failure.message;
-    timedOut = failure.killed === true || failure.signal === "SIGTERM";
-    exitCode = typeof failure.code === "number" ? failure.code : null;
-  }
+  const { exitCode, stdout, stderr, timedOut } = await executeVerificationCommand({
+    cwd: checkout,
+    command: input.command,
+    timeoutMs: input.timeoutMs,
+  });
 
   await rm(dirname(checkout), { recursive: true, force: true });
   const resultingSnapshot = await captureVerificationSnapshot(input.cwd);
