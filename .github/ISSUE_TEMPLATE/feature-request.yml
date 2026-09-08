@@ -1,0 +1,39 @@
+name: Feature request
+description: Propose an improvement through a concrete user workflow.
+title: "feature: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: textarea
+    id: workflow
+    attributes:
+      label: User workflow
+      description: What are you trying to finish, and who is doing it?
+      placeholder: As a… I need to… so that…
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current experience
+      description: How do you do this today, and where does it fail or waste time?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe observable behavior and a useful acceptance check.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Optional workarounds or simpler approaches.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and discussions.
+          required: true

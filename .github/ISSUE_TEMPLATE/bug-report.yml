@@ -1,0 +1,75 @@
+name: Bug report
+description: Report reproducible behavior that is broken.
+title: "bug: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve Orqara. Remove secrets and private repository content.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the result and what you expected instead.
+      placeholder: I tried to… I expected… Instead…
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Give the shortest reliable sequence and a minimal repository when possible.
+      placeholder: |
+        1. Open…
+        2. Start…
+        3. Observe…
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Orqara version
+      placeholder: 0.7.2
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - macOS desktop
+        - Windows desktop
+        - Web
+        - Mobile
+        - CLI
+        - Daemon
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, architecture, and agent provider/version.
+      placeholder: macOS 15 arm64, Codex CLI 1.2.3
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized logs
+      description: Paste raw output around the failure. Remove tokens, paths, and private code.
+      render: text
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshots or video
+      description: Add visual evidence for UI and interaction problems.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues.
+          required: true
+        - label: This report contains no secrets or private source code.
+          required: true

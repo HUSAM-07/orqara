@@ -1,0 +1,7 @@
+name = "orqara"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+main = "./src/server-entry.ts"
+
+[observability]
+enabled = true
