@@ -65,7 +65,7 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "typecheck:server": "npm run typecheck --workspace=@getpaseo/relay && npm run typecheck --workspace=@getpaseo/protocol && npm run typecheck --workspace=@getpaseo/client && npm run typecheck --workspace=@getpaseo/server && npm run typecheck --workspace=@getpaseo/cli",
     "test": "npm run test --workspaces --if-present",
-    "test:security": "npm run build:protocol && vitest run packages/server/src/server/auth.test.ts packages/server/src/server/authorization/index.test.ts packages/server/src/server/websocket-server.origin.test.ts packages/server/src/tasks/verification.test.ts packages/relay/src/encrypted-channel.test.ts",
+    "test:security": "npm run build:server-deps && vitest run packages/server/src/server/auth.test.ts packages/server/src/server/authorization/index.test.ts packages/server/src/server/websocket-server.origin.test.ts packages/server/src/tasks/verification.test.ts packages/relay/src/encrypted-channel.test.ts",
     "format": "oxfmt .",
     "format:files": "oxfmt",
     "format:check": "oxfmt --check .",
