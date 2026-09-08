@@ -41,7 +41,7 @@
   "dependencies": {
     "@getpaseo/protocol": "0.7.2",
     "@getpaseo/relay": "0.7.2",
-    "zod": "^4.4.3"
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
