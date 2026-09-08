@@ -10,6 +10,8 @@ afterPack: ./scripts/after-pack.js
 afterSign: ./scripts/after-sign.js
 directories:
   output: release
+publish:
+  provider: github
 files:
   - dist/**/*
   - "!**/*.map"
