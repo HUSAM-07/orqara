@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID as uuidv4 } from "node:crypto";
 import { z } from "zod";
 import type pino from "pino";
 import { getErrorMessage } from "@getpaseo/protocol/error-utils";

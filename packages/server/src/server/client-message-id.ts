@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID as uuidv4 } from "node:crypto";
 
 export function normalizeClientMessageId(clientMessageId: string | undefined): string | undefined {
   if (typeof clientMessageId !== "string") {

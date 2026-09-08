@@ -1,5 +1,7 @@
 # Dependencies
 node_modules/
+packages/expo-two-way-audio/package-lock.json
+packages/expo-two-way-audio/examples/*/package-lock.json
 
 # Build outputs
 build/
@@ -110,6 +112,7 @@ app.json
 /README.ko.md
 /README.zh-CN.md
 /docs/*
+!/docs/plugins.md
 !/docs/README.md
 !/docs/architecture.md
 !/docs/development.md

@@ -5,10 +5,12 @@ export function releaseBase(version: string) {
   return `https://github.com/HUSAM-07/orqara/releases/download/v${version}`;
 }
 
+const releasesUrl = "https://github.com/HUSAM-07/orqara/releases";
+
 export const previewDownloads = {
-  mac: `${releaseBase("0.7.2")}/Orqara-0.7.2-arm64.dmg`,
-  windows: `${releaseBase("0.7.2")}/Orqara-Setup-0.7.2-x64.exe`,
-  windowsArm64: `${releaseBase("0.7.2")}/Orqara-Setup-0.7.2-arm64.exe`,
+  mac: releasesUrl,
+  windows: releasesUrl,
+  windowsArm64: releasesUrl,
 } as const;
 
 export interface ReleaseAssetInfo {
@@ -33,8 +35,8 @@ export function downloadUrls(release: ReleaseAssetInfo) {
   };
 }
 
-export const appStoreUrl = "https://github.com/HUSAM-07/orqara/releases";
-export const playStoreUrl = "https://github.com/HUSAM-07/orqara/releases";
+export const appStoreUrl = releasesUrl;
+export const playStoreUrl = releasesUrl;
 export const webAppUrl = "https://github.com/HUSAM-07/orqara";
 
 export interface PrimaryDownload {

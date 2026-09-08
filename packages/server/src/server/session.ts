@@ -1,6 +1,6 @@
 import type { AgentRequests } from "./agent/requests/index.js";
 import equal from "fast-deep-equal";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID as uuidv4 } from "node:crypto";
 import { lstat, mkdir, mkdtemp, rename, rm, stat } from "node:fs/promises";
 import { basename, resolve, sep } from "path";
 import { homedir } from "node:os";

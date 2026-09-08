@@ -20,15 +20,14 @@ export const Route = createFileRoute("/download")({
 const BUILDS = [
   {
     name: "macOS",
-    detail: "Apple Silicon preview built and smoke-tested from this checkout.",
-    status: "Preview ready",
+    detail: "The first signed and notarized preview will target Apple Silicon.",
+    status: "Coming first",
     icon: Apple,
   },
   {
     name: "Windows",
-    detail:
-      "x64 and ARM64 installer previews are packaged; native CI launches and signs the release.",
-    status: "Installer preview ready",
+    detail: "x64 and ARM64 installers will follow after the Mac preview is validated.",
+    status: "Planned",
     icon: MonitorDown,
   },
 ] as const;
@@ -89,8 +88,7 @@ function Download() {
         </section>
 
         <p className="mt-6 text-xs leading-5 text-white/35">
-          Preview builds are unsigned. Production installers will use Apple notarization, native
-          Windows launch testing and Windows code signing before public distribution.
+          Public installers will be signed and platform-tested before distribution.
         </p>
         <p className="mt-3 text-xs leading-5 text-white/35">
           Windows on ARM?{" "}

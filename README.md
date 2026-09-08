@@ -12,12 +12,9 @@ terminals, files, diffs, checks, and review state in one place.
 
 ## Install
 
-The first public preview targets Apple Silicon Macs. Download the latest DMG from
-[GitHub Releases](https://github.com/HUSAM-07/orqara/releases/latest), open it, and drag Orqara to
-Applications. Windows x64 and ARM64 preview installers are published with each desktop release.
-
-Public preview builds may be unsigned while production signing is being configured. Release notes
-state the signing and test status of each artifact.
+The first public preview targets Apple Silicon Macs. Signed and notarized installers will be
+published on [GitHub Releases](https://github.com/HUSAM-07/orqara/releases) after release validation.
+Windows x64 and ARM64 installers will follow.
 
 ## What Orqara includes
 

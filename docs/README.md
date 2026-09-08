@@ -7,6 +7,7 @@ Use this index to find the shortest path into the repository.
 | [Architecture](architecture.md)    | Package boundaries, runtime components, and core data flow |
 | [Development](development.md)      | Local setup, common commands, and contribution workflow    |
 | [Testing](testing.md)              | Focused tests, security checks, and release evidence       |
+| [Plugin API](plugins.md)           | Runtime entry points and client registration surfaces      |
 | [Security policy](../SECURITY.md)  | Trust model and private vulnerability reporting            |
 | [Contributing](../CONTRIBUTING.md) | Issues, pull requests, and review expectations             |
 

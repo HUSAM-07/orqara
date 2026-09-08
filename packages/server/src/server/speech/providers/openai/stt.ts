@@ -4,7 +4,7 @@ import { OpenAI } from "openai";
 import { writeFile, unlink } from "fs/promises";
 import { join } from "path";
 import { tmpdir } from "os";
-import { v4 } from "uuid";
+import { randomUUID as v4 } from "node:crypto";
 import { inferAudioExtension } from "../../../agent/audio-utils.js";
 import type {
   LogprobToken,

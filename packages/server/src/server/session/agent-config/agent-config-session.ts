@@ -1,5 +1,5 @@
 import type pino from "pino";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID as uuidv4 } from "node:crypto";
 import { getErrorMessage, getErrorMessageOr } from "@getpaseo/protocol/error-utils";
 import type { AgentConfigApply } from "@getpaseo/protocol/messages";
 import type { AgentProviderNotice } from "../../agent/agent-sdk-types.js";
