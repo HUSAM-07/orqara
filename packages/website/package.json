@@ -11,7 +11,7 @@
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
-    "@cloudflare/vite-plugin": "^1.29.1",
+    "@cloudflare/vite-plugin": "^1.54.7",
     "@cloudflare/workers-types": "^4.20260317.1",
     "@tanstack/react-router": "^1.170.16",
     "@tanstack/react-start": "^1.168.26",
@@ -27,7 +27,7 @@
     "remark-directive": "^4.0.0",
     "remark-gfm": "^4.0.1",
     "shiki": "^4.0.2",
-    "wrangler": "^4.75.0"
+    "wrangler": "^4.131.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.8",

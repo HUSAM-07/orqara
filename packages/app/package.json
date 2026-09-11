@@ -159,7 +159,7 @@
     "serve-sim": "^0.1.40",
     "typescript": "~5.9.2",
     "vitest": "^4.1.10",
-    "wrangler": "^4.105.0",
+    "wrangler": "^4.131.0",
     "ws": "^8.20.0"
   },
   "reanimated": {
