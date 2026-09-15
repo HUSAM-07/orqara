@@ -57,25 +57,25 @@
   },
   "dependencies": {
     "@agentclientprotocol/sdk": "^1.4.0",
-    "use-sync-external-store": "^1.6.0"
+    "use-sync-external-store": "^1.7.0"
   },
   "devDependencies": {
     "@getpaseo/client": "0.7.2",
     "@getpaseo/protocol": "0.7.2",
     "@types/node": "^20.9.0",
-    "@types/react": "~19.2.0",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
+    "@types/react": "~19.3.0",
+    "react": "19.3.0",
+    "react-native": "0.87.1",
     "typescript": "^5.9.3",
     "vitest": "^4.1.10",
-    "zod": "^4.4.3"
+    "zod": "^4.6.2"
   },
   "peerDependencies": {
     "@getpaseo/client": "0.7.2",
     "@getpaseo/protocol": "0.7.2",
-    "react": "19.1.0",
+    "react": "19.3.0",
     "react-native": ">=0.81.5",
-    "zod": "^4.4.3"
+    "zod": "^4.6.2"
   },
   "peerDependenciesMeta": {
     "react-native": {
