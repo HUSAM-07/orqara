@@ -77,7 +77,7 @@
     "@getpaseo/protocol": "0.7.2",
     "@getpaseo/relay": "0.7.2",
     "@isaacs/ttlcache": "^2.1.4",
-    "@modelcontextprotocol/sdk": "1.29.0",
+    "@modelcontextprotocol/sdk": "1.32.0",
     "@opencode-ai/sdk": "1.14.46",
     "@xterm/headless": "^6.0.0",
     "ai": "5.0.78",
