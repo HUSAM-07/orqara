@@ -218,7 +218,7 @@ jobs:
           PASEO_DESKTOP_BROWSER_E2E_ARTIFACT_DIR: ${{ runner.temp }}/desktop-browser-e2e
 
       - name: Upload desktop browser diagnostics
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: ${{ failure() && runner.os == 'Linux' }}
         with:
           name: desktop-browser-e2e
@@ -235,7 +235,7 @@ jobs:
           PASEO_DESKTOP_SMOKE_ARTIFACT_DIR: ${{ runner.temp }}/desktop-smoke
 
       - name: Upload packaged smoke diagnostics
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: ${{ failure() && runner.os == 'Linux' }}
         with:
           name: desktop-packaged-smoke-linux-x64
@@ -348,7 +348,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Upload test artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: playwright-results-${{ env.PLAYWRIGHT_ARTIFACT }}
